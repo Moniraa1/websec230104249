@@ -11,6 +11,10 @@
     @include('layouts.menu')
     <div class="container"> 
     @yield('content')
+    @if(Auth::check())
+    @endif
+
+
 </div>
 </body>
 </html>
