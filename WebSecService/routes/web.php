@@ -8,6 +8,12 @@ use App\Http\Controllers\Web\GradeController;
 use App\Http\Controllers\Web\ExamController;
 use App\Http\Controllers\Web\UsersController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\StudentController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+    Route::post('/students/store', [StudentController::class, 'store'])->name('students.store');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('books', BookController::class)->only(['index', 'create', 'store']);
