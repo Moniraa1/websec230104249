@@ -2,31 +2,49 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasRoles;
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    use HasRoles; // Enables role retrieval
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+        'credit'
+    ];
 
-    public function role()
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected function casts(): array
     {
-        return $this->belongsTo(Role::class, 'role_id'); // Adjust column name if needed
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
-    protected $fillable = ['name', 'email', 'role', 'password'];
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+    // ✅ Check if user is Admin
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return isset($this->role) && $this->role === 'admin';
     }
+
+    // ✅ Check if user is an Employee
+    public function isEmployee()
+    {
+        return $this->role === 'employee';
+    }
+
+    public function purchases() {
+        return $this->hasMany(Purchase::class);
+    }
+    
 }

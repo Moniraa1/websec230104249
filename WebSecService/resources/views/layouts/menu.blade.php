@@ -1,83 +1,68 @@
-<nav class="navbar navbar-expand-sm bg-light">
-<div class="container-fluid">
-<ul class="navbar-nav">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/') }}">My Website</a>
 
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<li class="nav-item">
-<a class="nav-link" href="./">Home</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" href="./even">Even Numbers</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" href="./prime">Prime Numbers</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" href="./multable">Multiplication Table</a>
-</li>
-<li class="nav-item">
-<a class="nav-link" href="./text">text</a>
-</li>
- <li class="nav-item">
-<a class="nav-link" href="./bill">bill</a>
-</li> 
-<li class="nav-item">
-<a class="nav-link" href="./transcript">transcript</a>
-</li> 
-<li class="nav-item">
-<a class="nav-link" href="./products"> products list</a>
-</li> 
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/even') }}">Even Numbers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/prime') }}">Prime Numbers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/multable') }}">Multiplication Table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/minitest') }}">Mini Test</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/transcript') }}">Transcript</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/users') }}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/tasks') }}">tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/products') }}">Products</a>
+                </li>
+            </ul>
 
-<li class="nav-item">
-    <a class="nav-link" href="./books">Books</a>
-</li>
+            <ul class="navbar-nav ms-auto">
+                @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            Welcome, {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
 
-@can('edit_users')
-    <li class="nav-item">
-        <a class="nav-link" href="./users">Users</a>
-    </li>
-@endcan
-
-<li class="nav-item">
-<a class="nav-link" href="./grades"> grades</a>
-</li> 
-
-<li class="nav-item">
-<a class="nav-link" href="./exam"> exam</a>
-</li>
-
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('students.create') }}">Add Student</a>
-</li>
-
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('tasks.index') }}">To-Do List</a>
-</ul>
-
-<ul class="navbar-nav">
-    @auth
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-            {{ Auth::user()->name }}
-        </a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ route('profile') }}">Profile</a></li>
-            <li>
-                <form action="{{ route('do_logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="dropdown-item">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </li>
-    @else
-    <li class="nav-item"><a class="nav-link" href="{{route('login')}}">Login</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{route('register')}}">Register</a></li>
-    @endauth
-    
-</li>
-    
- </ul>
-
-</div>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('users.profile') }}">
+                                    <i class="fas fa-user"></i> My Profile
+                                </a>
+                            </li>
+                          
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger">Logout</button>
+                        </form>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Register</a>
+                    </li>
+                @endauth
+            </ul>
+        </div>
+    </div>
 </nav>

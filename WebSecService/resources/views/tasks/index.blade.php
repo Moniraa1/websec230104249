@@ -1,29 +1,34 @@
-@extends('layouts.master') 
-@section('title', 'Prime Numbers') 
+@extends('layouts.master')
+@section('title', 'Tasks')
+
 @section('content')
 <div class="container">
     <h2>To-Do List</h2>
+    
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
     <form action="{{ route('tasks.store') }}" method="POST">
         @csrf
-        <input type="text" name="name" placeholder="Task Name" required>
-        <button type="submit">Add Task</button>
+        <div class="input-group mb-3">
+            <input type="text" name="name" class="form-control" placeholder="Enter task..." required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Add</button>
+            </div>
+        </div>
     </form>
 
-    <ul>
+    <ul class="list-group">
         @foreach ($tasks as $task)
-            <li>
-                {{ $task->name }} - {{ $task->status ? 'Completed' : 'Pending' }}
-                @if (!$task->status)
-                    <form action="{{ route('tasks.update', $task->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit">Complete</button>
-                    </form>
-                @endif
-                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span class="{{ $task->status ? 'text-success' : '' }}">{{ $task->name }}</span>
+                <form action="{{ route('tasks.update', $task->id) }}" method="POST">
                     @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-{{ $task->status ? 'secondary' : 'success' }}">
+                        {{ $task->status ? 'Mark as Pending' : 'Mark as Completed' }}
+                    </button>
                 </form>
             </li>
         @endforeach

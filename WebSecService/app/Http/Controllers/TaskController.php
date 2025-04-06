@@ -2,51 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Task;
-use Illuminate\Support\Facades\Auth;
-namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::id())->get();
+        $tasks = Auth::user()->tasks ?? collect(); 
         return view('tasks.index', compact('tasks'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $request->validate(['name' => 'required|string|max:255']);
+        Auth::user()->tasks()->create(['name' => $request->name]);
 
-        Task::create([
-            'name' => $request->name,
-            'user_id' => Auth::id(),
-            'status' => 0,
-        ]);
-
-        return redirect()->back()->with('success', 'Task added successfully!');
+        return redirect()->route('tasks.index')->with('success', 'Task added successfully!');
     }
 
-    public function update($id)
+    public function update(Task $task)
     {
-        $task = Task::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        $task->update(['status' => 1]);
+        if ($task->user_id !== Auth::id()) {
+            abort(403);
+        }
 
-        return redirect()->back()->with('success', 'Task marked as completed!');
-    }
-
-    public function destroy($id)
-    {
-        $task = Task::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        $task->delete();
-
-        return redirect()->back()->with('success', 'Task deleted successfully!');
+        $task->update(['status' => !$task->status]);
+        return redirect()->route('tasks.index')->with('success', 'Task status updated!');
     }
 }
+

@@ -1,18 +1,20 @@
-@extends('layouts.master') 
-@section('title', 'welcome') 
+@extends('layouts.master')
+
+@section('title', 'Welcome')
+
 @section('content')
-    <script>
-    function doSomething() {
-        alert("welcome to our website");
-    }
-    </script>
-    <div class="card m-4">
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+<div class="card m-4">
     <div class="card-body">
-        welcome to home page
-        <button type="button" class="btn btn-success" onclick="doSomething()">Press here</button>
+        @auth
+            <h3>Welcome, {{ Auth::user()->name }}!</h3>
+        @else
+            <h3>Welcome to Home Page</h3>
+        @endauth
     </div>
-    </div>
+</div>
 @endsection
-
-
-
