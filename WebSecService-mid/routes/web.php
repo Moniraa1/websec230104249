@@ -22,12 +22,12 @@ Route::post('users/charge_credit/{user}', [UsersController::class, 'chargeCredit
 
 
 
-
 Route::get('products', [ProductsController::class, 'list'])->name('products_list');
 Route::get('products/edit/{product?}', [ProductsController::class, 'edit'])->name('products_edit');
 Route::post('products/save/{product?}', [ProductsController::class, 'save'])->name('products_save');
 Route::get('products/delete/{product}', [ProductsController::class, 'delete'])->name('products_delete');
 Route::post('/buy/{product}', [ProductsController::class, 'buy'])->name('buy_product')->middleware('auth');
+Route::get('verify', [UsersController::class, 'verify'])->name('verify');
 
 Route::get('/', function () {
     return view('welcome');
